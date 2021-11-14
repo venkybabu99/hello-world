@@ -1,0 +1,5 @@
+hello
+hai
+bye
+good
+bad
