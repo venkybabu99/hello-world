@@ -1,0 +1,61 @@
+ADCExtract
+non-prod
+'{"user":"dtsdev", "password":"OS5rdUsD"}'
+prod
+'{"user":"itgadmin", "password":"d2rHdBPc&AsY"}'
+
+ADCLastRecording
+non-prod
+'{"user":"dtsdev", "password":"OS5rdUsD"}'
+prod
+'{"user":"V2Capture", "password":"VCap$76"}'
+
+AntiFraud
+non-prod
+'{"pid7":[{"ftp_user":"itgadmin"},{"ftp_pswd":"d2rHdBPc&AsY"}], "pid5":[{"ftp_user":"res_lasn"},{"ftp_pswd":"f4r5sd1"}], "pid2":[{"ftp_user":"itgadmin"},{"ftp_pswd":"d2rHdBPc&AsY"}], "pid13":[{"ftp_user":"itgadmin"},{"ftp_pswd":"d2rHdBPc&AsY"}], "pid9":[{"ftp_user":"itgadmin"},{"ftp_pswd":"d2rHdBPc&AsY"}], "pid90":[{"ftp_user":"c0r3l0g!c"},{"ftp_pswd":"r!v3rs!d3"}], "extract":[{"ftp_user":"dtsdev"},{"ftp_pswd":"OS5rdUsD"}]}'
+prod
+'{"pid7":[{"ftp_user":"itgadmin"},{"ftp_pswd":"d2rHdBPc&AsY"}], "pid5":[{"ftp_user":"res_lasn"},{"ftp_pswd":"f4r5sd1"}], "pid2":[{"ftp_user":"itgadmin"},{"ftp_pswd":"d2rHdBPc&AsY"}], "pid13":[{"ftp_user":"itgadmin"},{"ftp_pswd":"d2rHdBPc&AsY"}], "pid9":[{"ftp_user":"itgadmin"},{"ftp_pswd":"d2rHdBPc&AsY"}], "pid90":[{"ftp_user":"c0r3l0g!c"},{"ftp_pswd":"r!v3rs!d3"}], "extract":[{"ftp_user":"itgadmin"},{"ftp_pswd":"d2rHdBPc&AsY"}]}'
+
+DocumentCountsExport
+non-prod
+'{"user":"dtsdev", "password":"OS5rdUsD"}'
+prod
+'{"user":"itgadmin", "password":"d2rHdBPc&AsY"}
+
+DQImport
+non-prod
+'{"sr":[{"ftp_user":"dqadmin"},{"ftp_pswd":"FRS724"}], "sad":[{"ftp_user":"dqadmin"},{"ftp_pswd":"FRS724"}], "srd":[{"ftp_user":"dqadmin"},{"ftp_pswd":"FRS724"}]}'
+prod
+'{"sr":[{"ftp_user":"dqadmin"},{"ftp_pswd":"FRS724"}], "sad":[{"ftp_user":"dqadmin"},{"ftp_pswd":"FRS724"}], "srd":[{"ftp_user":"dqadmin"},{"ftp_pswd":"FRS724"}]}'
+
+DQMCExtract
+non-prod
+'{"user":"dtsdev", "password":"OS5rdUsD"}'
+prod
+'{"user":"dqadmin", "password":"FRS724"}'
+
+DQMMExtract
+non-prod
+'{"user":"dtsdev", "password":"OS5rdUsD"}'
+prod
+'{"user":"dqadmin", "password":"FRS724"}'
+
+path=dtsdev			secret=OS5rdUsD
+path=itgadmin		secret=d2rHdBPc&AsY
+path=V2Capture		secret=VCap$76
+path=res_lasn		secret=f4r5sd1
+path=c0r3l0g!c		secret=r!v3rs!d3
+path=dqadmin		secret=FRS724
+
+    # secret = '{"password":"OS5rdUsD"}'
+    # con.update_secret(path="dtsdev", secret= secret)
+    # secret = '{"password":"d2rHdBPc&AsY"}'
+    # con.update_secret(path="itgadmin", secret= secret)
+    # secret = '{"password":"VCap$76"}'
+    # con.update_secret(path="V2Capture", secret= secret)
+    # secret = '{"password":"f4r5sd1"}'
+    # con.update_secret(path="res_lasn", secret= secret)
+    # secret = '{"password":"r!v3rs!d3"}'
+    # con.update_secret(path="c0r3l0g!c", secret= secret)
+    # secret = '{"password":"FRS724"}'
+    # con.update_secret(path="dqadmin", secret= secret) 

@@ -1,0 +1,198 @@
+[DATA]
+
+[LOGS]
+log_fmt = %(levelname)s [%(relative)s] [%(asctime)s.%(msecs)03d] [%(name)s %(threadName)s] [%(filename)s:%(lineno)s] [%(funcName)s()]: %(message)s
+log_path = E:\\Temp\\Logs\\
+
+[testsecrets]
+ftp_host = ftp2.resftp.com
+ftp_folder = "/test/aa"
+ftp_secret={'user': 'user7','passwd': 's$cret'}
+
+[CountyEditReject]
+to_email = ascheepers@corelogic.com,lmartinez@corelogic.com
+
+[ADCExtract]
+ftp_host = ftp2.resftp.com
+ftp_user = dtsdev
+ftp_path = /itgres/ADC
+
+[ADCLastRecording]
+get_ADCLastRecording_Records = select CAST(FIPS AS CHAR(5)) AS FIPS, CAST(DeedCategory AS CHAR(3)) AS DeedCategory, CAST(LastRecording AS CHAR(8)) AS LastRecording from dbo.ADCLatestRecording Where FIPS >= '01001' and FIPS <= '78999' Order by DeedCategory, FIPS
+ftp_host = ftp2.resftp.com
+# ftp_user = V2Capture
+ftp_user = dtsdev
+ftp_path = /
+
+[DQImport]
+get_files_by_pid = SELECT TOP (2000) FileId, ProcessId, StatusId, FileName, DiscoveryDate FROM {0} WHERE [ProcessId] = {1} ORDER BY DiscoveryDate DESC
+check_file_processed = SELECT [FileId] FROM {0} z WHERE filename = '{1}' AND ProcessId = {2} AND EXISTS (SELECT (1) FROM {3} t WHERE z.FileId = t.ParentFileId AND t.FileTypeId = 2 AND t.StatusId = 2)
+insert_new_file = SET NOCOUNT ON; INSERT INTO {0} ( [ProcessId], [FileTypeId], [FileName], [ParentFileId] ) VALUES ( {1}, {2}, dbo.SplitFileName('{3}'), {4} ); SELECT SCOPE_IDENTITY()
+update_file_status = UPDATE {0} SET [StatusId] = {1} WHERE [FileId] = {2} OR [ParentFileId] = {3}
+files_to_load = ["sr", "sad", "srd"]
+file_sr_cfg = ["ftp2.resftp.com","dtsdev","/fiona/sr_extracts/backup","*.ZIP","","","SR_*.TXT"]
+file_sad_cfg = ["ftp2.resftp.com","dtsdev","/fiona/sad_extracts/backup","*.ZIP","","","SAd_*.TXT"]
+file_srd_cfg = ["ftp2.resftp.com","dtsdev","/fiona/srd_extracts/backup","*.ZIP","","","SRd_*.TXT"]
+file_sr_width = [21, 5, 9, 1, 1, 2, 20, 2, 1, 1, 1, 1, 2, 1, 1, 8, 8, 11, 20, 20, 20, 10, 10, 11, 1, 1, 6, 4, 20, 20, 10, 10, 20, 10, 11, 1, 1, 6, 4, 20, 20, 10, 10, 20, 10, 11,1, 1, 6, 4, 20, 20, 10, 10, 20, 10, 255, 1, 255, 50, 50, 20, 20, 5, 15, 20, 20, 5, 1, 1, 2, 50, 50, 20, 20, 5, 15, 20, 20, 5, 1, 1, 2, 1, 20, 10, 2, 50, 4, 10, 6, 2, 50, 2, 5, 4, 4, 100, 100, 100, 100, 1, 1, 6, 50, 25, 20, 50, 50, 2, 10, 1, 6, 50, 25, 20, 50, 50, 2, 10, 1, 6, 50, 25, 20, 50, 50, 2, 10, 35, 40, 10, 10, 10, 10, 10, 10, 10, 10, 8, 8, 20, 20, 15, 50, 5, 6, 6, 30, 8, 50, 6, 6, 38, 3, 3, 3, 41, 1,10, 10, 11, 2, 5, 30, 20, 20, 40, 2, 10, 6, 30, 5, 4, 2, 4, 4, 20, 50, 2, 2, 10, 6, 4, 50, 2, 5, 4, 4, 50, 1, 50, 15, 20, 20, 10, 20, 20, 5, 5, 10, 1, 1, 50, 1, 50, 15, 20, 20, 10, 20, 20, 5, 5, 10, 1, 1, 2, 2, 8, 11, 11, 20, 8, 20, 1, 1, 1, 1, 1, 1, 10, 10, 10, 10, 10, 10, 11, 4, 4, 35, 35, 56, 56, 9, 30,30, 30, 30, 30, 30, 30, 30, 30, 30, 1, 2]
+file_sr_header = ['1_VENDOR_SR_UNIQUE_ID', '2_SR_SCM_ID','3_SR_PROCESS_ID', '4_SR_SOURCE_FLAG','5_SR_DC_REC_STATUS', '6_SR_TRAN_TYPE','7_SR_DOC_TYPE', '8_SR_DEED_TYPE','9_SR_NOMINAL_FLAG', '10_SR_ARMS_LENGTH_FLAG','11_SR_FULL_PART_CODE', '12_SR_MULT_PORT_CODE','13_SR_SA_MATCH_CODE', '14_SR_INTER_RELATED','15_SR_MULT_APN_FLAG_KEYED', '16_SR_DATE_FILING','17_SR_DATE_TRANSFER', '18_SR_VAL_TRANSFER','19_SR_DOC_NBR_FMT', '20_SR_DOC_NBR_RAW','21_SR_DOC_INST_NBR', '22_SR_DOC_BOOK','23_SR_DOC_PAGE', '24_SR_LOAN_VAL_1', '25_SR_LOAN_TYPE_1','26_SR_INT_RATE_TYPE_1', '27_SR_INT_RATE_VAL_1','28_SR_LOAN_TERM_1', '29_SR_TD_DOC_NBR_1','30_SR_TD_DOC_INST_NBR_1', '31_SR_TD_DOC_BOOK_1','32_SR_TD_DOC_PAGE_1', '33_SR_LOAN_ID_1','34_SR_LOAN_ID_1_EXT', '35_SR_LOAN_VAL_2','36_SR_LOAN_TYPE_2', '37_SR_INT_RATE_TYPE_2','38_SR_INT_RATE_VAL_2', '39_SR_LOAN_TERM_2','40_SR_TD_DOC_NBR_2', '41_SR_TD_DOC_INST_NBR_2','42_SR_TD_DOC_BOOK_2', '43_SR_TD_DOC_PAGE_2','44_SR_LOAN_ID_2', '45_SR_LOAN_ID_2_EXT','46_SR_LOAN_VAL_3', '47_SR_LOAN_TYPE_3','48_SR_INT_RATE_TYPE_3', '49_SR_INT_RATE_VAL_3','50_SR_LOAN_TERM_3', '51_SR_TD_DOC_NBR_3','52_SR_TD_DOC_INST_NBR_3', '53_SR_TD_DOC_BOOK_3','54_SR_TD_DOC_PAGE_3', '55_SR_LOAN_ID_3','56_SR_LOAN_ID_3_EXT', '57_SR_SELLER','58_SR_SELLER_TYPE', '59_SR_BUYER', '60_SR_BUYER_1','61_SR_BUYER_1_FIRST', '62_SR_BUYER_1_MID','63_SR_BUYER_1_LAST', '64_SR_BUYER_1_SUF','65_SR_BUYER_1_GROUP', '66_SR_BUYER_1_SP_FIRST','67_SR_BUYER_1_SP_MID', '68_SR_BUYER_1_SP_SUF','69_SR_BUYER_1_TYPE', '70_SR_BUYER_1_TRUST_FLAG','71_SR_BUYER_1_STATUS_CODE', '72_SR_BUYER_2','73_SR_BUYER_2_FIRST', '74_SR_BUYER_2_MID','75_SR_BUYER_2_LAST', '76_SR_BUYER_2_SUF','77_SR_BUYER_2_GROUP', '78_SR_BUYER_2_SP_FIRST','79_SR_BUYER_2_SP_MID', '80_SR_BUYER_2_SP_SUF','81_SR_BUYER_2_TYPE', '82_SR_BUYER_2_TRUST_FLAG','83_SR_BUYER_2_STATUS_CODE', '84_SR_BUYER_ET_FLAG','85_SR_MAIL_HOUSE_NBR', '86_SR_MAIL_FRACTION','87_SR_MAIL_DIR', '88_SR_MAIL_STREET_NAME','89_SR_MAIL_SUF', '90_SR_MAIL_UNIT_PRE','91_SR_MAIL_UNIT_VAL', '92_SR_MAIL_POST_DIR','93_SR_MAIL_CITY', '94_SR_MAIL_STATE', '95_SR_MAIL_ZIP','96_SR_MAIL_PLUS_4', '97_SR_MAIL_CRRT','98_SR_MAIL_ADDR_RAW', '99_SR_MAIL_ADDR_FOREIGN_1','100_SR_MAIL_ADDR_FOREIGN_2', '101_SR_SITE_ADDR_RAW','102_SR_LNDR_SELLER_FLAG', '103_SR_LNDR_CREDIT_LINE_1','104_SR_LNDR_CODE_1', '105_SR_LNDR_FIRST_NAME_1','106_SR_LNDR_LAST_NAME_1', '107_SR_LNDR_HOUSE_NBR_1','108_SR_LNDR_STREET_NAME_1', '109_SR_LNDR_CITY_1','110_SR_LNDR_STATE_1', '111_SR_LNDR_ZIP_1','112_SR_LNDR_CREDIT_LINE_2', '113_SR_LNDR_CODE_2','114_SR_LNDR_FIRST_NAME_2', '115_SR_LNDR_LAST_NAME_2','116_SR_LNDR_HOUSE_NBR_2', '117_SR_LNDR_STREET_NAME_2','118_SR_LNDR_CITY_2', '119_SR_LNDR_STATE_2','120_SR_LNDR_ZIP_2', '121_SR_LNDR_CREDIT_LINE_3','122_SR_LNDR_CODE_3', '123_SR_LNDR_FIRST_NAME_3','124_SR_LNDR_LAST_NAME_3', '125_SR_LNDR_HOUSE_NBR_3','126_SR_LNDR_STREET_NAME_3', '127_SR_LNDR_CITY_3','128_SR_LNDR_STATE_3', '129_SR_LNDR_ZIP_3','130_SR_PARCEL_NBR_FMT', '131_SR_PARCEL_NBR_RAW','132_SR_PARCEL_NBR_KEYED_1', '133_SR_PARCEL_NBR_KEYED_2','134_SR_PARCEL_NBR_KEYED_3', '135_SR_PARCEL_NBR_KEYED_4','136_SR_PARCEL_NBR_KEYED_5', '137_SR_PARCEL_NBR_KEYED_6','138_SR_PARCEL_NBR_KEYED_7', '139_SR_PARCEL_NBR_KEYED_8','140_SR_DATE_KEYED', '141_SR_DATE_ORIG_LOAN','142_SR_DOC_NBR_ORIG_LOAN', '143_SR_ESCROW_ID','144_SR_EXCISE_NBR', '145_SR_LAWYER_NAME','146_SR_LAWYER_CODE', '147_SR_LGL_KEYED_LOT','148_SR_LGL_KEYED_BLOCK', '149_SR_LGL_KEYED_TRACT','150_SR_LGL_KEYED_UNIT', '151_SR_LGL_KEYED_SUB_NAME','152_SR_LGL_KEYED_PLAT_BOOK','153_SR_LGL_KEYED_PLAT_PAGE','154_SR_LGL_KEYED_PT3_FILLER', '155_SR_LGL_KEYED_SECTION','156_SR_LGL_KEYED_TOWNSHIP', '157_SR_LGL_KEYED_RANGE','158_SR_LGL_KEYED_PT4_FILLER', '159_SR_LGL_KEYED_TYPE','160_SR_MISC_ID_1', '161_SR_MISC_ID_2','162_SR_TAX_TRANSFER', '163_SR_TAX_TRANSFER_RATE_AREA','164_SR_TITLE_CO_CODE', '165_SR_TITLE_CO_NAME','166_SR_TITLE_ID', '167_SA_SITE_HOUSE_NBR','168_SA_SITE_STREET_NAME', '169_SA_SITE_DIR','170_SA_SITE_UNIT_PRE', '171_SA_SITE_UNIT_VAL','172_SA_SITE_CITY', '173_SA_SITE_ZIP','174_SA_SITE_PLUS_4', '175_SA_SITE_POST_DIR','176_SA_SITE_SUF', '177_SA_SITE_CRRT','178_SA_MAIL_HOUSE_NBR', '179_SA_MAIL_STREET_NAME','180_SA_MAIL_DIR', '181_SA_MAIL_POST_DIR','182_SA_MAIL_UNIT_PRE', '183_SA_MAIL_UNIT_VAL','184_SA_MAIL_SUF', '185_SA_MAIL_CITY','186_SA_MAIL_STATE', '187_SA_MAIL_ZIP','188_SA_MAIL_PLUS_4', '189_SA_MAIL_CRRT','190_SA_OWNER_1', '191_SA_OWNER_1_ET_FLAG','192_SA_OWNER_1_FIRST', '193_SA_OWNER_1_GROUP','194_SA_OWNER_1_LAST', '195_SA_OWNER_1_MID','196_SA_OWNER_1_PRE', '197_SA_OWNER_1_SP_FIRST','198_SA_OWNER_1_SP_MID', '199_SA_OWNER_1_SP_SUF','200_SA_OWNER_1_SUF', '201_SA_OWNER_1_TITLE','202_SA_OWNER_1_TRUST_FLAG', '203_SA_OWNER_1_TYPE','204_SA_OWNER_2', '205_SA_OWNER_2_ET_FLAG','206_SA_OWNER_2_FIRST', '207_SA_OWNER_2_GROUP','208_SA_OWNER_2_LAST', '209_SA_OWNER_2_MID','210_SA_OWNER_2_PRE', '211_SA_OWNER_2_SP_FIRST','212_SA_OWNER_2_SP_MID', '213_SA_OWNER_2_SP_SUF','214_SA_OWNER_2_SUF', '215_SA_OWNER_2_TITLE','216_SA_OWNER_2_TRUST_FLAG', '217_SA_OWNER_2_TYPE','218_SA_OWNERSHIP_STATUS_CODE_1','219_SA_OWNERSHIP_STATUS_CODE_2', '220_SA_DATE_TRANSFER','221_SA_VAL_TRANSFER', '222_SA_LOAN_VAL_1','223_SA_DOC_NBR_FMT', '224_SA_DATE_NOVAL_TRANSFER','225_SA_DOC_NBR_NOVAL', '226_SA_EXEMP_FLAG_1','227_SA_EXEMP_FLAG_2', '228_SA_EXEMP_FLAG_3','229_SA_EXEMP_FLAG_4', '230_SA_EXEMP_FLAG_5','231_SA_EXEMP_FLAG_6', '232_SA_EXEMP_VAL_1','233_SA_EXEMP_VAL_2', '234_SA_EXEMP_VAL_3','235_SA_EXEMP_VAL_4', '236_SA_EXEMP_VAL_5','237_SA_EXEMP_VAL_6', '238_SA_TAX_VAL_DELINQ','239_SA_TAX_YEAR_DELINQ', '240_SA_YR_APN_ADDED','241_SA_PARCEL_NBR_PRIMARY', '242_SA_PARCEL_NBR_ALT','243_VENDOR_SA_PROPERTY_ID','244_VENDOR_SA_PROPERTY_ID_PREV', '245_SA_PROCESS_ID','246_FILLER1', '247_FILLER2', '248_FILLER3','249_FILLER4', '250_FILLER5', '251_FILLER6','252_FILLER7', '253_FILLER8', '254_FILLER9','255_FILLER10', '256_FILLER', 'X']
+file_sad_width = [56, 5, 35, 1, 2]
+file_sad_header = ['1_SAD-FARES-NATURAL-KEY', '2_SAD-SCM-ID', '3_SAD-PARCEL-NBR-PRIMARY', '4_SAD-END-OF-RECORD', 'X']
+file_srd_width = [21, 5, 8, 20, 1, 2]
+file_srd_header = ['1_SR_UNIQUE_ID', '2_SR_SCM_ID', '3_SR_DATE_TRANSFER', '4_SR_DOC_NBR_FMT', '5_Filler', 'X']
+# Tables
+table_name_files = [dbo].[Files]
+table_name_file_sr = [dbo].[DQSR]
+table_name_file_srd = [dbo].[DQSRd]
+table_name_file_sad = [dbo].[DQSAd]
+pid = 1
+zip_pswd = FIONA
+
+[DQMCExtract]
+zip_pswd = FIONA
+# localpath = d:\services\ssis\package\DQMCExtract\
+localpath = e:\services\ssis\package\DQMCExtract\
+ftp_host = ftp2.resftp.com
+ftp_user = dtsdev
+ftp_path = /Fiona/MC_Extracts
+
+[DQMMExtract]
+# localpath = d:\services\ssis\package\DQMMExtract\
+localpath = e:\services\ssis\package\DQMMExtract\
+zip_pswd = FIONA
+ftp_host = ftp2.resftp.com
+ftp_user = dtsdev
+ftp_path = /Fiona/MM_Extracts
+
+[DocumentCountsExport]
+# localpath = d:\services\ssis\package\DocumentCountsExport\
+localpath = e:\services\ssis\package\DocumentCountsExport\
+ftp_host = ftp2.resftp.com
+# ftp_user = itgadmin
+ftp_user = dtsdev
+ftp_path = /itgres/JUAQUIN/Pete
+
+[DQTrackingInfo]
+get_diablo_currenteditions = SELECT CntyCd, Edition, Versn FROM Common.vTaxLoadControl tlc WHERE IsCurrentEdition = 1
+sp_updatetrackinginfo = [dbo].[UpdateTrackingInfo]
+dest_fqn_table_name = [dbo].[CurrentEditions]
+
+[AntiFraud]
+check_file_processed = SET NOCOUNT ON; DECLARE @filename VARCHAR(250) = '{0}', @processid INT = {1}, @filetypeid INT = {2}, @statusid INT = {3}; SELECT [FileId] FROM [dbo].[Files] z WHERE filename = @filename AND ProcessId = @processid AND EXISTS (SELECT (1) FROM [dbo].[Files] t WHERE z.FileId = t.ParentFileId AND t.FileTypeId = @filetypeid AND t.StatusId = @statusid)
+check_file_processed_txt = SET NOCOUNT ON; DECLARE @filename VARCHAR(250) = '{0}', @processid INT = {1}, @filetypeid INT = {2}, @statusid INT = {3}; SELECT [FileId] FROM [dbo].[Files] z WHERE filename = @filename AND ProcessId = @processid AND FileTypeId = @filetypeid AND StatusId = @statusid
+get_corp_tags = SET NOCOUNT ON; SELECT [Field] FROM [CorporationTags] AS [c] OUTER APPLY( SELECT * FROM [util].[dbo].[ParseDelimited] ([c].[Tags], ' ') AS [b] ) AS [b]
+get_names_to_parse = SET NOCOUNT ON; SELECT [RecordId], [RawName1], [RawName2], [RawName3], [RawName4] FROM [dbo].[NameView] WHERE NULLIF(RawName1,'') IS NOT NULL OR NULLIF(RawName2,'') IS NOT NULL OR NULLIF(RawName3,'') IS NOT NULL OR NULLIF(RawName4,'') IS NOT NULL
+update_parsed_names = SET NOCOUNT ON; UPDATE n SET Name1 = t.Name1, Name2 = t.Name2, Name3 = t.Name3, Name4 = t.Name4 FROM [dbo].[ParsedNames] n INNER JOIN [dbo].[TEMP_NAME_PARSED] t ON t.RecordId = n.TargetId
+get_final_output = SET NOCOUNT ON; EXEC {0} {1}, {2} WITH RESULT SETS (( TargetId INT, DocumentYear CHAR(2), DocumentNumber VARCHAR(7), DocumentSequence CHAR(2), Apn VARCHAR(10), DocumentType CHAR(2), [PageCount] CHAR(3), Name1 VARCHAR(30), Name2 VARCHAR(30), Name3 VARCHAR(30), Name4 VARCHAR(30), Street VARCHAR(40), CityState VARCHAR(24), Zip5 VARCHAR(5), Zip4 VARCHAR(4) ))
+# ##############################################################
+# filesToLoad = [["sellername",5],["target_la",2],["target_riverside",13],["target_la_sb827",9]]
+filesToLoad = [["target_la",2],["target_la_sb827",9]]
+ftpfilesdaysback = 180
+# ##############################################################
+# File SREA (PID=7)
+# ##############################################################
+pid7_cfg = ["srea",7,"","ftp2.resftp.com","dtsdev","/itgres/AntiFraud/SREA/06037","*.TXT","","","*.*","06037","0"]
+pid7_width = [10, 2, 5, 4, 5, 8, 4, 1, 6, 40, 32, 32, 32, 32, 1, 5, 1, 9, 32, 24, 1, 5, 1, 9, 32, 24, 1, 1, 9, 1, 7, 4, 3, 2, 2, 7, 4, 3, 2, 2, 7, 4, 3, 2, 2, 7, 4, 3, 2, 2, 7, 4, 3, 2, 2, 7]
+pid7_header = ['Apn','AdministrativeRegion','ClusterCode','UseCode','BatchNumber','RecordingDate','YearSoldToDate','TaxStatus','ZoningCode','LegalDescriptionLastLine','OwnerName1','OwnerName2','OwnerName3','OwnerName4','SitusKey','SitusNumber','SitusDir','SitusZip','SitusStreet','SitusCityState','MailKey','MailNumber','MailDir','MailZip','MailStreet','MailCityState','Filler','ParcelCount','DttAmount','DocumentType','RecorderDocumentNumber','YearBuilt1','UnitCount1','BedroomCount1','BathCount1','SqFtMain1','YearBuilt2','UnitCount2','BedroomCount2','BathCount2','SqFtMain2','YearBuilt3','UnitCount3','BedroomCount3','BathCount3','SqFtMain3','YearBuilt4','UnitCount4','BedroomCount4','BathCount4','SqFtMain4','YearBuilt5','UnitCount5','BedroomCount5','BathCount5','SqFtMain5']
+pid7_table = [dbo].[TaxUpdate06037]
+# pid7_localpath = d:\services\ssis\download\antifraud\srea
+pid7_localpath = e:\services\ssis\download\antifraud\srea
+pid7_email = ["noreply@corelogic.com","lmartinez@corelogic.com;ascheepers@corelogic.com","","","[AntiFraud] SREA Update", "The following SREA file has been imported into AntiFraud:\t\r\n\r\n {0}"]
+pid7_postprocessing = 
+# ##############################################################
+# File SellerName (PID=5) (No longer process)
+# ##############################################################
+# pid5_cfg = ["sellername", 5,"","ftp2.resftp.com","dtsdev","/dsl_la_sn/backup/","*.ZIP","","","*.*","",""]
+# pid5_width = [2, 2, 10, 8, 30, 18, 30, 18, 30, 18, 30, 18, 100, 1]
+# pid5_header = ['State','CountyCode','DocumentNumber','RecordingDate','Seller/Grantor 1 First Name or Company Name','Seller/Grantor 1 Last Name or Company Code','Seller/Grantor 2 First Name or Company Name','Seller/Grantor 2 Last Name or Company Code','Seller/Grantor 3 First Name or Company Name','Seller/Grantor 3 Last Name or Company Code','Seller/Grantor 4 First Name or Company Name','Seller/Grantor 4 Last Name or Company Code','Filler','ProcessControlFlag']
+# pid5_table = [dbo].[SellerName]
+# # pid5_localpath = d:\services\ssis\download\antifraud\sellername
+# pid5_localpath = e:\services\ssis\download\antifraud\sellername
+# pid5_email = ["","","","","",""]
+# pid5_postprocessing = EXEC [PostProcessSellerName]
+# ##############################################################
+# File Target_LA (PID=2)
+# ##############################################################
+pid2_cfg = ["target_la",2,"","ftp2.resftp.com","dtsdev","/itgres/AntiFraud/Input/","*.TXT","","","*.txt","06037","1"]
+pid2_width = [2, 7, 3]
+pid2_header = ['DocumentYear','DocumentNumber','PageCount']
+pid2_table = [dbo].[TargetDocuments]
+# pid2_localpath = d:\services\ssis\download\antifraud\la
+pid2_localpath = e:\services\ssis\download\antifraud\la
+pid2_email = ["","","","","",""]
+pid2_postprocessing = EXEC [SetFileCounty] {0}, {1}
+# ##############################################################
+# File Target Riverside (PID=13) (No longer process)
+# ##############################################################
+# pid13_cfg = ["target_riverside",13,"","ftp2.resftp.com","dtsdev","/itgres/AntiFraud/InputRiverside","*.TXT","","","*.txt","06065","4"]
+# pid13_width = [2, 7, 3]
+# pid13_header = ['DocumentYear','DocumentNumber','PageCount']
+# pid13_table = [dbo].[TargetDocuments]
+# pid13_localpath =
+# pid13_email = ["","","","","",""]
+# pid13_postprocessing = EXEC [SetFileCounty] {0}, {1}
+# ##############################################################
+# File Target LA SB827 (PID=9)
+# ##############################################################
+pid9_cfg = ["target_la_sb827",9,"","ftp2.resftp.com","dtsdev","/itgres/AntiFraud/InputSB827","*.TXT","","","*.*","06037","3"]
+pid9_width = [2, 7, 3]
+pid9_header = ['DocumentYear','DocumentNumber','PageCount']
+pid9_table = [dbo].[TargetDocuments]
+# pid9_localpath = d:\services\ssis\download\antifraud\sb827
+pid9_localpath = e:\services\ssis\download\antifraud\sb827
+pid9_email = ["","","","","",""]
+pid9_postprocessing = EXEC [SetFileCounty] {0}, {1}
+# ##############################################################
+# File Riverside Weekly TaxRoll (PID=90) (No longer process)
+# ##############################################################
+# pid90_cfg = ["riversideweeklytaxroll",90,"","ftp2.resftp.com","dtsdev","/","AssessmentRoll.csv","","","AssessmentRoll.csv","06065",""]
+# pid90_width = []
+# pid90_header = ['PIN','ConvenyanceNumber','MailAddress','MailZipCode','SitusStreetNumber','SitusStreetPredirectional','SitusStreetName','SitusStreetType','SitusUnitNumber','SitusZipCode','SitusCityName','AssessmentDescription','LegalParty1','LegalParty2','LegalParty3','LegalParty4','MailCity','MailState']
+# pid90_table = [dbo].[TaxUpdate06065]
+# # pid90_localpath = d:\services\ssis\download\antifraud\riversidetaxroll
+# pid90_localpath = e:\services\ssis\download\antifraud\riversidetaxroll
+# # pid90_email = ["AntiFraud Process <breid@corelogic.com>","breid@corelogic.com;apanchal@corelogic.com","","","[AntiFraud] Riverside Weekly Taxroll Update","The following weekly Riverside taxroll file has been imported into AntiFraud:\t\r\n\r\n {0}"]
+# pid90_email = ["AntiFraud Process <breid@corelogic.com>","lmartinez@corelogic.com","","","[AntiFraud] Riverside Weekly Taxroll Update","The following weekly Riverside taxroll file has been imported into AntiFraud:\t\r\n\r\n {0}"]
+# pid90_sp_taxupdate06065 = [dbo].[TaxImportUpdate06065]
+# pid90_postprocessing = 
+# ##############################################################
+# 
+# ##############################################################
+table_tmp_TempOC1900 = [dbo].[TempOC1900]
+sp_CopyOCTargetDocuments = [dbo].[CopyOCTargetDocuments]
+sp_GetItrSubsetMaxRecordId = [dbo].[GetItrSubsetMaxRecordId]
+addrstdstaging_table = [dbo].[AddressStdStaging]
+table_itrsubset = [dbo].[ItrSubset]
+sp_TaxUpdateNewRecordCount = [dbo].[TaxUpdateNewRecordCount]
+sp_TaxImportUpdate06037 = [dbo].[TaxImportUpdate06037]
+sp_TaxUpdateActive = [dbo].[TaxUpdateActive]
+sp_AddressStdGetInputBatch = [dbo].[AddressStdGetInputBatch]
+sp_GetFileInfo = [dbo].[GetFileInfo]
+sp_AddressStdGetInput = [dbo].[AddressStdGetInput]
+sp_AddressStdMatchOutput = [dbo].[AddressStdMatchOutput]
+sp_AddExtractFile = [dbo].[AddExtractFile]
+sp_GetFinalOutput = [dbo].[GetFinalOutput]
+sp_SetExtractCompleted = [dbo].[SetExtractCompleted]
+sp_ArchiveExtractedTargetRecords = [dbo].[ArchiveExtractedTargetRecords]
+sp_MatchTargetRecords = [dbo].[MatchTargetRecords]
+sp_PrePopulateParsedNames = [dbo].[PrePopulateParsedNames]
+sp_AddressStdProcessTax = [dbo].[AddressStdProcessTax]
+sp_GetReleasedExtracts = [dbo].[GetReleasedExtracts]
+sp_ArchiveTax = [dbo].[ArchiveTax]
+sp_SetFileStatus = [dbo].[SetFileStatus]
+sp_AddFile = [dbo].[AddFile]
+sp_GetExtractById = [dbo].[GetExtractById]
+sp_AddressStdGetPending = [dbo].[AddressStdGetPending]
+# ##############################################################
+# Extract Files
+# ##############################################################
+extract_cfg = ["ftp2.resftp.com","dtsdev","/itgres/AntiFraud/Output/{0}/"]
+extractdata_table = [dbo].[ExtractData]
+# ##############################################################
+# AddressPlus Batch
+# ##############################################################
+addrpls_queue=anadt
+addrpls_email=tdao@facorelogic.com
+addrpls_ipaddr=realsna1sasgs01
+
+[CRECounts]
+to_email = bcenteno@corelogic.com,lmartinez@corelogic.com
