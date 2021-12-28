@@ -1,0 +1,4 @@
+(Get-ChildItem -File C:\windows | Sort-Object Name ).FullName >D:\Mohammed\Venkatesh\windows-files-GCP-FTR01.txt
+$strReference = Get-Content "D:\Mohammed\Venkatesh\windows-files-NTT-FTR01.txt"
+$strDifference = Get-Content "D:\Mohammed\Venkatesh\windows-files-GCP-FTR01.txt"
+Compare-Object $strReference $strDifference -IncludeEqual | Out-File D:\Mohammed\Venkatesh\ftr01-diff.txt
