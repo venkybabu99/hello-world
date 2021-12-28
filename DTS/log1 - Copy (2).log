@@ -1,0 +1,7 @@
+git add DTS3rdparty
+git commit -m "commit message"
+git push origin master 
+
+524288000 
+
+git config --global http.postBuffer 524288000
