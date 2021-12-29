@@ -1,0 +1,66 @@
+<#This Script will fetch all the .exe,.dll,.lib,.ini,.constr and 3rd party tools files inthe services folder and will zip and push to the
+  Jfrog_arifactory#>
+$ErrorActionPreference = 'SilentlyContinue'
+
+New-Item -Path "D:\MOHAMMED\paths\path.txt" -ItemType File -Force    #create  "path.txt" file to get fullpath of the folders from services folder
+
+New-Item -Path "D:\MOHAMMED\paths\path2.txt" -ItemType File -Force  #stores fullpath of the services folder recursivley used to create folders
+
+New-Item -Path "D:\MOHAMMED\paths\dest.txt" -ItemType File -Force 
+
+$dir = New-Item -Path "D:\MOHAMMED\services" -ItemType Directory -Force
+
+$services_dir = "D:\services"
+
+(Get-ChildItem -Path $services_dir -Recurse -Directory -Force ).fullname > D:\MOHAMMED\paths\path.txt 
+
+
+Get-ChildItem -Path $services_dir -Name -Recurse -Directory -Force  | Out-File -FilePath D:\MOHAMMED\paths\path2.txt 
+
+foreach ($file in (Get-Content -Path D:\MOHAMMED\paths\path2.txt)) {
+  New-Item -Path "D:\MOHAMMED\services\$file" -ItemType Directory -Force 
+}
+
+Write-Host "****************************  Replicating service Folders to destination Folder  *************************************** "-ForegroundColor Green
+
+<#text file to store paths of the services folder and
+ used to create folders that Replicate folders in services
+   #>
+
+(Get-ChildItem -Path $dir -Recurse -Directory -Force -ErrorAction SilentlyContinue ).fullname > D:\MOHAMMED\paths\dest.txt 
+
+$source = get-content D:\MOHAMMED\paths\path.txt
+$destination = get-content D:\MOHAMMED\paths\dest.txt
+$Count= $source.Count
+$i = 0
+
+<#=========================================================================================================================#>
+
+<# Copying files to the newly created reflected folders in destination directory #>
+
+
+For($i -eq 0;$i -Lt $count; $i++){
+
+
+$list=Get-ChildItem -path $source[$i] | ? {$_.Name -notlike 'log.txt'  -and $_.Name -notlike '*.zip' -and $_.Name -notlike '*.log' -and $_.Name -notlike '*.tif' -and $_.Name -notlike '*.IMG'} 
+
+$list | ForEach-Object {Copy-Item $_.FullName  $destination[$i]} | Out-Null
+
+
+
+}
+
+
+Write-Host "****************************  Items Copied to Destination Folder  *************************************** "-ForegroundColor Yellow 
+
+Get-ChildItem -Path D:\MOHAMMED\services -Directory -Recurse -Include 'logs','images' -Force | Remove-Item -recurse 
+
+$dest_ZIP = "$dir"
+
+Write-Host "******************* Now Archiving the Folder *******************"-ForegroundColor Green 
+
+Compress-Archive -Path "$dest_ZIP" -DestinationPath "D:\MOHAMMED\dts01_services.zip" -Force
+
+
+Write-Host "******************* Zip Folder Created *******************"-ForegroundColor Yellow 
+
